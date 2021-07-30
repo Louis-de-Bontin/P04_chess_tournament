@@ -1,6 +1,6 @@
-from controler import menu
+from controler import begining
 # Lance le programme
 def __main__():
-    menu.main_menu()
+    begining.begin_prog()
 
 __main__()

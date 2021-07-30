@@ -2,11 +2,6 @@ from vue.basic_functions import print_, entry_user_int, display_players_header, 
 from model import tournaments, rounds
 from datetime import date
 
-def save_tournaments(saved_tournaments, db_tournaments):
-    db_tournaments.truncate()
-    for tournament in saved_tournaments:
-        db_tournaments.insert(tournament.serialize_tournament())
-
 def choix1(menu, saved_players, saved_tournaments, db_tournaments):
     nb_joueurs = menu.display_tournament_menu()
     if len(saved_players) > 0:
@@ -31,7 +26,9 @@ def choix1(menu, saved_players, saved_tournaments, db_tournaments):
         index_participants = multiple_user_entry("Qui participent ? (" + str(nb_joueurs) + " réponses)", nb_joueurs)
         participants = []
         for index in index_participants:
-            participants.append(saved_players[index])
+            # Mettre le score du tournois quelque part (class ?)
+            new_player = saved_players[index]
+            participants.append([new_player, 0, new_player.rank])
         
         clocktype_index = entry_user_int(
             "Quel est le type d'horloge ?" +
@@ -72,8 +69,8 @@ def choix1(menu, saved_players, saved_tournaments, db_tournaments):
 
         if validation_infos == 1:
             saved_tournaments.append(new_tournament)
-            save_tournaments(saved_tournaments, db_tournaments)
-            new_tournament.process_tournament()
+            new_tournament.save_tournaments(saved_tournaments, db_tournaments)
+            new_tournament.process_tournament(saved_tournaments, db_tournaments)
         else:
             del new_tournament
             choix1(menu, saved_players, saved_tournaments, db_tournaments)
