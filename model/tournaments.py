@@ -1,3 +1,4 @@
+from time import strftime
 from vue.basic_functions import entry_user_int, print_
 from model import rounds
 from datetime import date
@@ -34,6 +35,17 @@ class Tournaments:
         self.nb_joueurs = nb_joueurs
         self.nb_rounds = nb_rounds
 
+    def display_tournament_basic(self):
+        print_(
+            "Nom : " + self.name,
+            "\nDescription : " + self.description,
+            "\nRound " + str(self.rounds_count) + "/" + str(self.nb_rounds),
+            "\nParticipants :"
+        )
+        for participant in self.participants:
+            print_(participant[0].__str__())
+        print_("\n")
+
     def display_tournament(self):
         print_(
             "|Infos --> Name : " +
@@ -58,39 +70,45 @@ class Tournaments:
             " "*23 + "|" +
             "\n|" + "-"*61 + "|"
         )
+        self.participants.sort(key = lambda x: x[1], reverse=True)
+        i = 1
         for participant in self.participants:
             print_(
-                "|" + 
-                participant[0].__str__() +
-                " "*(30 - len(participant[0].__str__())) +
+                "|" + str(i) + ("->") +
+                participant[0].__str__() + 
+                " "*(27 - len(participant[0].__str__())) +
                 "|" +
                 str(participant[1]) +
                 " "*(30 - len(str(participant[1]))) +
                 "|"
             )
+            i += 1
         print_("\n")
 
         for round in self.rounds:
             round.display_round()
         
         print_("\n\n")
-    
-    def modify_tournament(self):
-        pass
-
-    def end_tournament(self):
-        pass
 
     def process_tournament(self, saved_tournaments, db_tournaments):
-        print(saved_tournaments)
-        del_index = saved_tournaments.index(self)
-        saved_tournaments.pop(del_index)
-        print(saved_tournaments)
         while self.rounds_count < self.nb_rounds:
-            print(saved_tournaments)
+            del_index = saved_tournaments.index(self)
+            saved_tournaments.pop(del_index)
             enter_result = entry_user_int("1) Entrer les résultats\n2) Retour au menu principale", 1, 2)
             if enter_result == 1:
-                for match in self.rounds[self.rounds_count - 1].matchs:
+                # Création d'un round
+                new_round = rounds.Rounds(
+                    "Round" + str(self.rounds_count),
+                    [],
+                    date.today().strftime("%d/%m/%Y"),
+                    "unknown"            
+                )
+                # Création des matchs associés
+                new_round.create_match_first_round(self.participants)
+                self.rounds.append(new_round)
+
+                for match in self.rounds[-1].matchs:
+                    print_("Résultats :")
                     display_matchs(match)
                     gagne = int(input(
                         "Qui a gagné ?\n1) " +
@@ -107,28 +125,87 @@ class Tournaments:
                         match[0][1] += 0.5
                         match[1][1] += 0.5
                     display_matchs(match)
+
                 self.display_tournament()
+
+                self.rounds_count += 1
 
                 # Actualise le tournois dans la list et le sauvegarde dans la bdd
                 saved_tournaments.append(self)
-                print(saved_tournaments)
                 self.save_tournaments(saved_tournaments, db_tournaments)
-                print("ok4")
 
-                self.rounds_count += 1
-                self.rounds.append(rounds.Rounds(
-                    "Round " + str(self.rounds_count),
-                    [],
-                    date.today().strftime("%d/%m/%Y"),
-                    "unknown"
-                ))
-                for round in self.rounds:
-                    round.display_round()
+                a = entry_user_int("Continuer ? (Oui/Non : 1/2)", 1, 2)
+                if a == 2:
+                    enter_result = 2
+                    break
 
             else:
                 break
 
-        self.status = "terminated"
+        if self.rounds_count == self.nb_rounds:
+            del_index = saved_tournaments.index(self)
+            saved_tournaments.pop(del_index)
+            self.status = "Over"
+            self.date_end = date.today().strftime("%d/%m/%Y")
+            saved_tournaments.append(self)
+            self.save_tournaments(saved_tournaments, db_tournaments)
+
+
+        # while self.rounds_count < self.nb_rounds:
+        #     enter_result = entry_user_int("1) Entrer les résultats\n2) Retour au menu principale", 1, 2)
+        #     if enter_result == 1:
+        #         for round in self.rounds:
+        #             for match in round.matchs:
+        #                 display_matchs(match)
+        #                 gagne = int(input(
+        #                     "Qui a gagné ?\n1) " +
+        #                     match[0][0].__str__() + " ou 2) " +
+        #                     match[1][0].__str__() + " ou 3) Ex aeco")
+        #                 )
+
+        #                 # J'actualise les scores
+        #                 if gagne == 1:
+        #                     match[0][1] += 1
+        #                 elif gagne == 2:
+        #                     match[1][1] += 1
+        #                 elif gagne == 3:
+        #                     match[0][1] += 0.5
+        #                     match[1][1] += 0.5
+        #                 display_matchs(match)
+        #             self.display_tournament()
+
+        #             self.rounds_count += 1
+        #             self.rounds.append(rounds.Rounds(
+        #                 "Round " + str(self.rounds_count),
+        #                 [],
+        #                 date.today().strftime("%d/%m/%Y"),
+        #                 "unknown"
+        #             ))
+
+        #             # Créer nouveaux matchs
+
+        #             for round in self.rounds:
+        #                 round.display_round()
+
+        #             if self.rounds_count > self.nb_rounds:
+        #                 self.status = "Over"
+
+        #             if self.status == "Over":
+        #                 self.date_end = date.today().strftime("%d/%m/%Y")
+        #                 enter_result = 2
+        #                 break
+
+        #             # Actualise le tournois dans la list et le sauvegarde dans la bdd
+        #             saved_tournaments.append(self)
+        #             self.save_tournaments(saved_tournaments, db_tournaments)
+
+        #             a = entry_user_int("Continuer ? (Oui/Non : 1/2)", 1, 2)
+        #             if a == 2:
+        #                 enter_result = 2
+        #                 break
+
+        #         else:
+        #             break
 
     def new_round(self):
         pass

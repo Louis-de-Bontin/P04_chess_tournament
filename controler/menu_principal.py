@@ -1,5 +1,5 @@
 from vue import display_menus
-from controler import choix_joueurs, choix_creer_tournois, choix_display_tournament, choix_continue_tournament
+from controler import choix_joueurs, choix_creer_tournois
 # from controler.load_db import saved_players, saved_tournaments, db_players, db_tournaments
 
 def menu_principal(saved_players, saved_tournaments, db_players, db_tournaments):
@@ -15,10 +15,10 @@ def menu_principal(saved_players, saved_tournaments, db_players, db_tournaments)
             choix_joueurs.choix2(menu, saved_players, db_players)
 
         elif choix_utilisateur == 3:
-            choix_continue_tournament.choix3(saved_tournaments, db_tournaments)
+            menu.display_tournament_loading_menu(saved_tournaments, db_tournaments)
 
         elif choix_utilisateur == 4:
-            choix_display_tournament.choix4(menu, saved_tournaments)
+            menu.display_tournament_results_menu(saved_tournaments)
 
         elif choix_utilisateur == 5:
             exit()

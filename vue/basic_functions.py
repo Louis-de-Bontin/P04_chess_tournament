@@ -3,10 +3,12 @@ def print_(*arg):
         print(a, end = '')
     print("","")
 
-def entry_user_int(text, min, max, pair=False):
+def entry_user_int(text, min, max, pair=False, zero_autorized=True):
     while True:
         try:
             choix_utilisateur = int(input(text))
+            if choix_utilisateur == 0 and zero_autorized:
+                break
             if choix_utilisateur < min or choix_utilisateur > max:
                 print("Mauvaise entrée, réessayer :")
                 continue

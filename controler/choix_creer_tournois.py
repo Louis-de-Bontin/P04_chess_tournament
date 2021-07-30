@@ -48,7 +48,7 @@ def choix1(menu, saved_players, saved_tournaments, db_tournaments):
         description = input("Description : ")
         status = "playing"
 
-        list_rounds[0].create_match_first_round(participants)
+        # list_rounds[0].create_match_first_round(participants)
 
         new_tournament = tournaments.Tournaments(
             name,

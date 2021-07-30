@@ -1,4 +1,5 @@
 from vue.basic_functions import print_
+import re
 
 def display_matchs(matchs):
     if isinstance(matchs, tuple):
@@ -34,40 +35,30 @@ class Rounds:
         self.datetime_start = datetime_start
         self.datetime_end = datetime_end
 
-    def modify_round(self):
-        pass
-
-    def end_round(self):
-        pass
-
-    def create_match_first_round(self, players, matchs=None):
-        if not matchs:
+    def create_match_first_round(self, players):
+        numero_round = re.findall('[0-9]+', self.name)
+        if numero_round[0] == 1 and len(numero_round) == 0:
             # Je trie les joueurs en fonction de leur score (index 4 de la liste du joueur)
-            rank_player = players[0]
             players.sort(key = lambda x: x[2])
-            # Je sépars la lise des joueurs en 2 listes (une avec la première moitier, et l'autre avec la 2eme moitier)
-            middle_index = len(players)//2
-            half1 = players[:middle_index]
-            half2 = players[middle_index:]
-
-            matchs = []
-            i = 0
-            # Tant que j'ai des joueurs dans une liste, je l'assotie avec le joueur avec le même classement dans l'autre moitier
-            while i < len(half1):
-                matchs.append((half1[i], half2[i])) # Un match est un tuple
-                i += 1
-        print(type(matchs))
-        self.matchs = matchs
-        display_matchs(matchs)
+        else:
+            players.sort(key=lambda sl: (-sl[1],sl[2]))
         
-        # else:
-        #     pass
+        # Je sépars la lise des joueurs en 2 listes (une avec la première moitier, et l'autre avec la 2eme moitier)
+        middle_index = len(players)//2
+        half1 = players[:middle_index]
+        half2 = players[middle_index:]
 
-    def display_current_matchs(self):
-        pass
+        matchs = []
+        i = 0
+        # Tant que j'ai des joueurs dans une liste, je l'assotie avec le joueur avec le même classement dans l'autre moitier
+        while i < len(half1):
+            matchs.append((half1[i], half2[i])) # Un match est un tuple
+            i += 1
+        self.matchs = matchs
 
-    def enter_match_results(self, match):
-        pass
+        print_("Nouveaux matchs :")
+        display_matchs(matchs)
+        print_("\n\n")
 
     def display_round(self):
         print_(
