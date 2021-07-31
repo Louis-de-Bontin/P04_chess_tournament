@@ -57,28 +57,28 @@ def load_db():
             recovered_matchs = []
             for match in round["matchs"]:
                 recovered_match = (
-                    [
+                    [[
                     joueurs.Joueurs(
-                        match[0][0]["first_name"],
-                        match[0][0]["last_name"],
-                        match[0][0]["birthdate"],
-                        match[0][0]["sex"],
-                        match[0][0]["rank"]
+                        match[0][0][0]["first_name"],
+                        match[0][0][0]["last_name"],
+                        match[0][0][0]["birthdate"],
+                        match[0][0][0]["sex"],
+                        match[0][0][0]["rank"]
                     ),
-                    match[0][1],
-                    match[0][2]
-                ], 
-                    [
+                    match[0][0][1],
+                    match[0][0][2]
+                ], match[0][1]], 
+                    [[
                     joueurs.Joueurs(
-                        match[1][0]["first_name"],
-                        match[1][0]["last_name"],
-                        match[1][0]["birthdate"],
-                        match[1][0]["sex"],
-                        match[1][0]["rank"]
+                        match[1][0][0]["first_name"],
+                        match[1][0][0]["last_name"],
+                        match[1][0][0]["birthdate"],
+                        match[1][0][0]["sex"],
+                        match[1][0][0]["rank"]
                     ),
-                    match[1][1],
-                    match[1][2]
-                ])
+                    match[1][0][1],
+                    match[1][0][2]
+                ], match[1][1]])
                 recovered_matchs.append(recovered_match)
             recovered_round = rounds.Rounds(
                 round["name"],

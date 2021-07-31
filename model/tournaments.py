@@ -92,38 +92,55 @@ class Tournaments:
 
     def process_tournament(self, saved_tournaments, db_tournaments):
         while self.rounds_count < self.nb_rounds:
-            del_index = saved_tournaments.index(self)
-            saved_tournaments.pop(del_index)
             enter_result = entry_user_int("1) Entrer les résultats\n2) Retour au menu principale", 1, 2)
             if enter_result == 1:
-                # Création d'un round
-                new_round = rounds.Rounds(
-                    "Round" + str(self.rounds_count),
-                    [],
-                    date.today().strftime("%d/%m/%Y"),
-                    "unknown"            
-                )
-                # Création des matchs associés
-                new_round.create_match_first_round(self.participants)
-                self.rounds.append(new_round)
+                del_index = saved_tournaments.index(self)
+                saved_tournaments.pop(del_index)
+                if not self.rounds[-1].matchs:
+                    print("pas encore de match")
+                    # Je vérifie que le round soit terminé
+                    i = 0
+                    tot_score_round = 0
+                    for match in self.rounds[-1].matchs:
+                        tot_score_round += match[i][1]
+                        i += 1
+                    if tot_score_round < i or i == 0:
+                    # Création d'un round
+                        new_round = rounds.Rounds(
+                            "Round" + str(self.rounds_count),
+                            [],
+                            date.today().strftime("%d/%m/%Y"),
+                            "unknown"            
+                        )
+                        # Création des matchs associés
+                        new_round.create_match_first_round(self.participants)
+                        self.rounds.append(new_round)
 
                 for match in self.rounds[-1].matchs:
                     print_("Résultats :")
                     display_matchs(match)
                     gagne = int(input(
                         "Qui a gagné ?\n1) " +
-                        match[0][0].__str__() + " ou 2) " +
-                        match[1][0].__str__() + " ou 3) Ex aeco")
+                        match[0][0][0].__str__() + " ou 2) " +
+                        match[1][0][0].__str__() + " ou 3) Ex aeco")
                     )
 
                     # J'actualise les scores
                     if gagne == 1:
                         match[0][1] += 1
+                        match[0][0][1] += 1
+                        match[0][0][2] += 1
                     elif gagne == 2:
                         match[1][1] += 1
+                        match[1][0][1] += 1
+                        match[1][0][2] += 1
                     elif gagne == 3:
                         match[0][1] += 0.5
+                        match[0][0][1] += 0.5
+                        match[0][0][2] += 0.5
                         match[1][1] += 0.5
+                        match[1][0][1] += 0.5
+                        match[1][0][2] += 0.5
                     display_matchs(match)
 
                 self.display_tournament()

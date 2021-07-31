@@ -4,9 +4,9 @@ import re
 def display_matchs(matchs):
     if isinstance(matchs, tuple):
         print_(
-            matchs[0][0].__str__() +
+            matchs[0][0][0].__str__() +
             " VS " +
-            matchs[1][0].__str__() +
+            matchs[1][0][0].__str__() +
             "(" +
             str(matchs[0][1]) +
             " - " +
@@ -16,9 +16,9 @@ def display_matchs(matchs):
     elif isinstance(matchs, list):
         for match in matchs:
             print_(
-                match[0][0].__str__() +
+                match[0][0][0].__str__() +
                 " VS " +
-                match[1][0].__str__() +
+                match[1][0][0].__str__() +
                 "(" +
                 str(match[0][1]) +
                 " - " +
@@ -52,7 +52,15 @@ class Rounds:
         i = 0
         # Tant que j'ai des joueurs dans une liste, je l'assotie avec le joueur avec le même classement dans l'autre moitier
         while i < len(half1):
-            matchs.append((half1[i], half2[i])) # Un match est un tuple
+            ################################
+            ### J'ai changé l'architechture de matchs, 
+            ### Il faut donc revoir quand je l'appel 
+            ### pour actualiser les numéros dans les crochets,
+            ### Pour ce qui est du score, il sera simplement 
+            ### égale à la somme des résultats des matchs
+            ### de toutes les instances de rounds.
+            ################################
+            matchs.append(([half1[i], 0], [half2[i], 0])) # Un match est un tuple
             i += 1
         self.matchs = matchs
 
@@ -73,7 +81,12 @@ class Rounds:
     def serialize_round(self):
         match_list = []
         for match in self.matchs:
-            match_list.append(([match[0][0].serialize_player(), match[0][1], match[0][2]], [match[1][0].serialize_player(), match[1][1], match[1][2]]))
+            match_list.append(
+                (
+                    [[match[0][0][0].serialize_player(), match[0][0][1], match[0][0][2]], match[0][1]],
+                    [[match[1][0][0].serialize_player(), match[1][0][1], match[1][0][2]], match[1][1]]
+                )
+            )
         serialized_round = {
             "name" : self.name,
             "matchs" : match_list,
