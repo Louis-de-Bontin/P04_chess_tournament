@@ -1,3 +1,4 @@
+from model.tournaments import Tournaments
 from vue import message, basic_functions
 from vue.basic_functions import print_, entry_user_int
 
@@ -21,26 +22,38 @@ class Menus:
         return choix_utilisateur
 
     def display_tournament_loading_menu(self, saved_tournaments, db_tournaments):
-        print_(message.load_tournament_menu)
-        i = 1
+        tournaments_playing = []
         for tournament in saved_tournaments:
             if tournament.status == "playing":
-                print_("\n" +str(i) +") Tournois : " + str(i))
+                tournaments_playing.append(tournament)
+
+        if len(tournaments_playing) == 0:
+            print_("Aucun tournois en cours.")
+        else:
+            print_(message.load_tournament_menu)
+            i = 1
+            for tournament in tournaments_playing:
+                print_("\nEntrez la commande : (" +str(i) +") pour reprendre le tournois : " + tournament.name)
                 i += 1
                 tournament.display_tournament_basic()
-        choix_utilisateur = entry_user_int("Quel tournoi voulez vous reprendre ?", 1, len(saved_tournaments)) - 1
+            choix_utilisateur = entry_user_int("Quel tournoi voulez vous reprendre ?", 1, len(tournaments_playing)) - 1
 
-        print_("Reprise du tournois suivant :")
-        saved_tournaments[choix_utilisateur].display_tournament()
-        saved_tournaments[choix_utilisateur].process_tournament(saved_tournaments, db_tournaments)
+            print_("Reprise du tournois suivant :")
+            tournaments_playing[choix_utilisateur].display_tournament()
+            tournaments_playing[choix_utilisateur].process_tournament(saved_tournaments, db_tournaments)
     
     def display_tournament_results_menu(self, saved_tournaments):
-        i = 0
+        tournaments_over = []
         for tournament in saved_tournaments:
+            if tournament.status == "Over":
+                tournaments_over.append(tournament)
+
+        i = 0
+        for tournament in tournaments_over:
             if tournament.status == "Over":
                 i+=1
                 print_("Tournois : ", i)
                 tournament.display_tournament_basic()
         choix_utilisateur = entry_user_int("Que voulez vous faire ?\n", 1, i)
         print_("\n\n\nVoici les résultats du tournois :")
-        saved_tournaments[choix_utilisateur - 1].display_tournament()
+        tournaments_over[choix_utilisateur - 1].display_tournament()

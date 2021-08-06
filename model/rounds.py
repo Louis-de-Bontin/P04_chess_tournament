@@ -52,14 +52,6 @@ class Rounds:
         i = 0
         # Tant que j'ai des joueurs dans une liste, je l'assotie avec le joueur avec le même classement dans l'autre moitier
         while i < len(half1):
-            ################################
-            ### J'ai changé l'architechture de matchs, 
-            ### Il faut donc revoir quand je l'appel 
-            ### pour actualiser les numéros dans les crochets,
-            ### Pour ce qui est du score, il sera simplement 
-            ### égale à la somme des résultats des matchs
-            ### de toutes les instances de rounds.
-            ################################
             matchs.append(([half1[i], 0], [half2[i], 0])) # Un match est un tuple
             i += 1
         self.matchs = matchs
@@ -70,17 +62,20 @@ class Rounds:
 
     def display_round(self):
         print_(
-            "Round :" +
+            "Round : " +
             self.name +
-            "\nDébut :" +
+            "\nDébut : " +
             self.datetime_start +
-            "\nMatchs :"
+            "\nFin : " +
+            self.datetime_end +
+            "\nMatchs : "
         )
         display_matchs(self.matchs)
 
     def serialize_round(self):
         match_list = []
         for match in self.matchs:
+            print("saving", match)
             match_list.append(
                 (
                     [[match[0][0][0].serialize_player(), match[0][0][1], match[0][0][2]], match[0][1]],

@@ -3,12 +3,10 @@ def print_(*arg):
         print(a, end = '')
     print("","")
 
-def entry_user_int(text, min, max, pair=False, zero_autorized=True):
+def entry_user_int(text, min, max, pair=False):
     while True:
         try:
             choix_utilisateur = int(input(text))
-            if choix_utilisateur == 0 and zero_autorized:
-                break
             if choix_utilisateur < min or choix_utilisateur > max:
                 print("Mauvaise entrée, réessayer :")
                 continue
@@ -21,16 +19,28 @@ def entry_user_int(text, min, max, pair=False, zero_autorized=True):
             continue
     return choix_utilisateur
 
-def multiple_user_entry(text, nb_entry):
+def multiple_user_entry(text, nb_entry, nb_saved_players):
     i = 0
     entry = []
-    while i < nb_entry:
-        i+=1
-        entry.append(int(input(text))-1)
+    while len(entry) < nb_entry:
+        entry.append(entry_user_int(text, 1, nb_saved_players)-1)
     return entry
 
 
 
 def display_players_header():
-    print("|       Prénom       |         Nom        | Date de naissance  |        Sex         |        Rang        |")
-    print("|" + "-"*20 + "|" + "-"*20 + "|" + "-"*20 + "|" + "-"*20 + "|" + "-"*20 +"|")
+    print(
+        "|       Prénom       |" +
+        "         Nom        |" +
+        " Date de naissance  |" +
+        "        Sex         |" +
+        "        Rang        |"
+    )
+    print(
+        "|" + "-"*20 +
+        "|" + "-"*20 +
+        "|" + "-"*20 +
+        "|" + "-"*20 +
+        "|" + "-"*20 +
+        "|"
+    )

@@ -57,7 +57,7 @@ class Tournaments:
             "; Fin : " +
             self.date_end +
             "; Round N°" +
-            str(len(self.rounds)) +
+            str(self.rounds_count) +
             "; Clocktype : " +
             self.clocktype +
             "; Status :" +
@@ -73,6 +73,7 @@ class Tournaments:
         self.participants.sort(key = lambda x: x[1], reverse=True)
         i = 1
         for participant in self.participants:
+            print(participant)
             print_(
                 "|" + str(i) + ("->") +
                 participant[0].__str__() + 
@@ -86,7 +87,8 @@ class Tournaments:
         print_("\n")
 
         for round in self.rounds:
-            round.display_round()
+            if self.rounds.index(round) != 0:
+                round.display_round()
         
         print_("\n\n")
 
@@ -96,25 +98,27 @@ class Tournaments:
             if enter_result == 1:
                 del_index = saved_tournaments.index(self)
                 saved_tournaments.pop(del_index)
-                if not self.rounds[-1].matchs:
-                    print("pas encore de match")
-                    # Je vérifie que le round soit terminé
-                    i = 0
-                    tot_score_round = 0
+
+                nb_matchs = 0
+                tot_score_round = 0
+                print("count", self.rounds_count)
+                if self.rounds_count > 1:
+                    print("self rounds :", self.rounds)
                     for match in self.rounds[-1].matchs:
-                        tot_score_round += match[i][1]
-                        i += 1
-                    if tot_score_round < i or i == 0:
-                    # Création d'un round
-                        new_round = rounds.Rounds(
-                            "Round" + str(self.rounds_count),
-                            [],
-                            date.today().strftime("%d/%m/%Y"),
-                            "unknown"            
-                        )
-                        # Création des matchs associés
-                        new_round.create_match_first_round(self.participants)
-                        self.rounds.append(new_round)
+                        score_match = match[0][1] + match[1][1]
+                        tot_score_round += score_match
+                        nb_matchs += 1
+                if tot_score_round == nb_matchs or nb_matchs == 0:
+                # Création d'un round
+                    new_round = rounds.Rounds(
+                        "Round " + str(self.rounds_count),
+                        [],
+                        date.today().strftime("%d/%m/%Y"),
+                        "unknown"            
+                    )
+                    # Création des matchs associés
+                    new_round.create_match_first_round(self.participants)
+                    self.rounds.append(new_round)
 
                 for match in self.rounds[-1].matchs:
                     print_("Résultats :")
@@ -143,6 +147,7 @@ class Tournaments:
                         match[1][0][2] += 0.5
                     display_matchs(match)
 
+                self.rounds[-1].datetime_end = date.today().strftime("%d/%m/%Y")
                 self.display_tournament()
 
                 self.rounds_count += 1
@@ -167,66 +172,6 @@ class Tournaments:
             saved_tournaments.append(self)
             self.save_tournaments(saved_tournaments, db_tournaments)
 
-
-        # while self.rounds_count < self.nb_rounds:
-        #     enter_result = entry_user_int("1) Entrer les résultats\n2) Retour au menu principale", 1, 2)
-        #     if enter_result == 1:
-        #         for round in self.rounds:
-        #             for match in round.matchs:
-        #                 display_matchs(match)
-        #                 gagne = int(input(
-        #                     "Qui a gagné ?\n1) " +
-        #                     match[0][0].__str__() + " ou 2) " +
-        #                     match[1][0].__str__() + " ou 3) Ex aeco")
-        #                 )
-
-        #                 # J'actualise les scores
-        #                 if gagne == 1:
-        #                     match[0][1] += 1
-        #                 elif gagne == 2:
-        #                     match[1][1] += 1
-        #                 elif gagne == 3:
-        #                     match[0][1] += 0.5
-        #                     match[1][1] += 0.5
-        #                 display_matchs(match)
-        #             self.display_tournament()
-
-        #             self.rounds_count += 1
-        #             self.rounds.append(rounds.Rounds(
-        #                 "Round " + str(self.rounds_count),
-        #                 [],
-        #                 date.today().strftime("%d/%m/%Y"),
-        #                 "unknown"
-        #             ))
-
-        #             # Créer nouveaux matchs
-
-        #             for round in self.rounds:
-        #                 round.display_round()
-
-        #             if self.rounds_count > self.nb_rounds:
-        #                 self.status = "Over"
-
-        #             if self.status == "Over":
-        #                 self.date_end = date.today().strftime("%d/%m/%Y")
-        #                 enter_result = 2
-        #                 break
-
-        #             # Actualise le tournois dans la list et le sauvegarde dans la bdd
-        #             saved_tournaments.append(self)
-        #             self.save_tournaments(saved_tournaments, db_tournaments)
-
-        #             a = entry_user_int("Continuer ? (Oui/Non : 1/2)", 1, 2)
-        #             if a == 2:
-        #                 enter_result = 2
-        #                 break
-
-        #         else:
-        #             break
-
-    def new_round(self):
-        pass
-
     def save_tournaments(self, saved_tournaments, db_tournaments):
         db_tournaments.truncate()
         for tournament in saved_tournaments:
@@ -240,6 +185,7 @@ class Tournaments:
             participants_list.append([serialized_participant, participant[1], participant[2]])
         rounds_list = []
         for round in self.rounds:
+            print(round)
             rounds_list.append(round.serialize_round())
         serialized_tournament = {
             "name" : self.name,
