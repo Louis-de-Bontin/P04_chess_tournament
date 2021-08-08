@@ -21,7 +21,7 @@ class Menus:
         choix_utilisateur = basic_functions.entry_user_int("Que voulez vous faire ?\n", 1, 3)
         return choix_utilisateur
 
-    def display_tournament_loading_menu(self, saved_tournaments, db_tournaments):
+    def display_tournament_loading_menu(self, saved_tournaments, db_tournaments, saved_players, db_players):
         tournaments_playing = []
         for tournament in saved_tournaments:
             if tournament.status == "playing":
@@ -40,7 +40,7 @@ class Menus:
 
             print_("Reprise du tournois suivant :")
             tournaments_playing[choix_utilisateur].display_tournament()
-            tournaments_playing[choix_utilisateur].process_tournament(saved_tournaments, db_tournaments)
+            tournaments_playing[choix_utilisateur].process_tournament(saved_tournaments, db_tournaments, saved_players, db_players)
     
     def display_tournament_results_menu(self, saved_tournaments):
         tournaments_over = []

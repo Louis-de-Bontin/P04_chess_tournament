@@ -30,7 +30,7 @@ def check_if_player_play_twice(index_participants, saved_players, nb_joueurs):
     else:
         return index_participants
 
-def choix1(menu, saved_players, saved_tournaments, db_tournaments):
+def choix1(menu, saved_players, saved_tournaments, db_tournaments, db_players):
     if len(saved_players) < 4:
         print_("Pas assez de joueur enrigistré pour faire un tournois")
     else:
@@ -87,7 +87,7 @@ def choix1(menu, saved_players, saved_tournaments, db_tournaments):
                 date_start,
                 date_end,
                 list_rounds,
-                0,
+                1,
                 participants,
                 clocktype,
                 description,
@@ -101,7 +101,7 @@ def choix1(menu, saved_players, saved_tournaments, db_tournaments):
             if validation_infos == 1:
                 saved_tournaments.append(new_tournament)
                 new_tournament.save_tournaments(saved_tournaments, db_tournaments)
-                new_tournament.process_tournament(saved_tournaments, db_tournaments)
+                new_tournament.process_tournament(saved_tournaments, db_tournaments, saved_players, db_players)
             else:
                 del new_tournament
                 choix1(menu, saved_players, saved_tournaments, db_tournaments)

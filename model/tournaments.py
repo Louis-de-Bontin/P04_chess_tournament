@@ -3,7 +3,7 @@ from vue.basic_functions import entry_user_int, print_
 from model import rounds
 from datetime import date
 from model.rounds import display_matchs
-# from controler.menu_principal import menu_principal, saved_players, saved_tournaments, db_players, db_tournaments
+from controler.gestion_joueurs import save_players
 
 class Tournaments:
     def __init__(
@@ -19,7 +19,7 @@ class Tournaments:
         description,
         status,
         nb_joueurs = 4,
-        nb_rounds = 4
+        nb_rounds = 5
     ):
 
         self.name = name
@@ -57,7 +57,7 @@ class Tournaments:
             "; Fin : " +
             self.date_end +
             "; Round N°" +
-            str(self.rounds_count) +
+            str(self.rounds_count -1) +
             "; Clocktype : " +
             self.clocktype +
             "; Status :" +
@@ -73,7 +73,6 @@ class Tournaments:
         self.participants.sort(key = lambda x: x[1], reverse=True)
         i = 1
         for participant in self.participants:
-            print(participant)
             print_(
                 "|" + str(i) + ("->") +
                 participant[0].__str__() + 
@@ -87,12 +86,11 @@ class Tournaments:
         print_("\n")
 
         for round in self.rounds:
-            if self.rounds.index(round) != 0:
-                round.display_round()
+            round.display_round()
         
         print_("\n\n")
 
-    def process_tournament(self, saved_tournaments, db_tournaments):
+    def process_tournament(self, saved_tournaments, db_tournaments, saved_players, db_players):
         while self.rounds_count < self.nb_rounds:
             enter_result = entry_user_int("1) Entrer les résultats\n2) Retour au menu principale", 1, 2)
             if enter_result == 1:
@@ -101,9 +99,7 @@ class Tournaments:
 
                 nb_matchs = 0
                 tot_score_round = 0
-                print("count", self.rounds_count)
                 if self.rounds_count > 1:
-                    print("self rounds :", self.rounds)
                     for match in self.rounds[-1].matchs:
                         score_match = match[0][1] + match[1][1]
                         tot_score_round += score_match
@@ -117,16 +113,18 @@ class Tournaments:
                         "unknown"            
                     )
                     # Création des matchs associés
-                    new_round.create_match_first_round(self.participants)
+                    new_round.create_match(self.participants)
                     self.rounds.append(new_round)
 
                 for match in self.rounds[-1].matchs:
                     print_("Résultats :")
                     display_matchs(match)
-                    gagne = int(input(
+                    gagne = entry_user_int(
                         "Qui a gagné ?\n1) " +
                         match[0][0][0].__str__() + " ou 2) " +
-                        match[1][0][0].__str__() + " ou 3) Ex aeco")
+                        match[1][0][0].__str__() + " ou 3) Ex aeco",
+                        1,
+                        3
                     )
 
                     # J'actualise les scores
@@ -150,10 +148,17 @@ class Tournaments:
                 self.rounds[-1].datetime_end = date.today().strftime("%d/%m/%Y")
                 self.display_tournament()
 
-                self.rounds_count += 1
+                if self.rounds_count < self.nb_rounds:
+                    self.rounds_count += 1
 
-                # Actualise le tournois dans la list et le sauvegarde dans la bdd
+                # Actualise le tournois dans la list et le sauvegarde dans la bdd et actualise le rank des joueurs dans la bdd
                 saved_tournaments.append(self)
+                for player in self.participants:
+                    saved_players.pop(saved_players.index(player[0]))
+                    player[0].rank = player[2]
+                    saved_players.append(player[0])
+                
+                save_players(saved_players, db_players)
                 self.save_tournaments(saved_tournaments, db_tournaments)
 
                 a = entry_user_int("Continuer ? (Oui/Non : 1/2)", 1, 2)
@@ -185,7 +190,6 @@ class Tournaments:
             participants_list.append([serialized_participant, participant[1], participant[2]])
         rounds_list = []
         for round in self.rounds:
-            print(round)
             rounds_list.append(round.serialize_round())
         serialized_tournament = {
             "name" : self.name,

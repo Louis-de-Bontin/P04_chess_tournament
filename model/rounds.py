@@ -35,9 +35,13 @@ class Rounds:
         self.datetime_start = datetime_start
         self.datetime_end = datetime_end
 
-    def create_match_first_round(self, players):
-        numero_round = re.findall('[0-9]+', self.name)
-        if numero_round[0] == 1 and len(numero_round) == 0:
+    def create_match(self, players):
+        numero_round_brut = re.findall('[0-9]+', self.name)
+        numero_round = ""
+        for numero in numero_round_brut:
+            numero_round = numero_round + numero
+        numero_round = int(numero_round)
+        if numero_round == 1:
             # Je trie les joueurs en fonction de leur score (index 4 de la liste du joueur)
             players.sort(key = lambda x: x[2])
         else:
@@ -75,7 +79,6 @@ class Rounds:
     def serialize_round(self):
         match_list = []
         for match in self.matchs:
-            print("saving", match)
             match_list.append(
                 (
                     [[match[0][0][0].serialize_player(), match[0][0][1], match[0][0][2]], match[0][1]],

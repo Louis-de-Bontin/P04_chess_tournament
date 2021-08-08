@@ -1,7 +1,5 @@
 from model import joueurs
-from vue import basic_functions, display_menus
-import time
-from tinydb import TinyDB
+from vue import basic_functions
 
 def save_players(saved_players, db_players):
     db_players.truncate()
@@ -26,27 +24,3 @@ def create_player(saved_players, db_players):
     save_players(saved_players, db_players)
 
     return saved_players
-
-    #     for joueur in saved_players:
-    #         joueur.display()
-        
-    #     input()
-
-    # if choix_utilisateur == 2:
-    #     if len(saved_players) == 0:
-    #         print("Pas de joueur enregistré, retour menu.")
-
-    #     else:
-    #         for joueur in saved_players:
-    #             joueur.display()     
-
-    # if choix_utilisateur == 3:
-    #     if len(saved_players) == 0:
-    #         print("Pas de joueur enregistré, retour menu.")
-    #         time.sleep(2)
-
-    #     for joueur in saved_players:
-    #         joueur.display()       
-    #         time.sleep(2)
-    
-    # display_menus.menu()
