@@ -62,6 +62,8 @@ class Tournaments:
             self.date_end +
             "; Round N°" +
             str(self.rounds_count) +
+            "/" +
+            str(self.nb_rounds - 1) +
             "; Clocktype : " +
             self.clocktype +
             "; Status :" +

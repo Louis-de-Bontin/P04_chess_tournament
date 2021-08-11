@@ -1,4 +1,4 @@
-from vue.basic_functions import print_
+from vue.basic_functions import entry_user_int, print_
 
 
 class Joueurs:
@@ -21,8 +21,11 @@ class Joueurs:
         )
 
     def modify_player(self):
-        self.rank = int(input("Nouveau rang du joueur ?"))
-        pass
+        self.rank = entry_user_int(
+            "Nouveau rang du joueur ?",
+            0,
+            9999999999
+        )
 
     def serialize_player(self):
         serialized_player = {
