@@ -1,6 +1,7 @@
 from tinydb import TinyDB
 from model import joueurs, tournaments, rounds
 
+
 def load_db():
     # Je vais chercher ma liste de joueurs dans ma bdd, et je les deserialize
     db_players = TinyDB('db_players.json')
@@ -40,13 +41,17 @@ def load_db():
         recovered_participants = []
         for participant in recovered_tournament.participants:
             for player in saved_players:
-                if player.first_name + player.last_name == participant[0]["first_name"] + participant[0]["last_name"]:
+                database_name = player.first_name + player.last_name
+                in_game_firstname = participant[0]["first_name"]
+                in_game_lastname = participant[0]["last_name"]
+                in_game_name = in_game_firstname + in_game_lastname
+                if database_name == in_game_name:
                     recovered_participants.append([
                         player,
                         participant[1],
                         participant[2]
                     ])
-            
+
         recovered_tournament.participants = recovered_participants
 
         recovered_rounds = []
@@ -54,46 +59,31 @@ def load_db():
             recovered_matchs = []
             for match in round["matchs"]:
                 for player in saved_players:
-                    if player.first_name + player.last_name == match[0][0][0]["first_name"] + match[0][0][0]["last_name"]:
+                    database_name = player.first_name + player.last_name
+                    p1_in_game_firstname = match[0][0][0]["first_name"]
+                    p1_in_game_lastname = match[0][0][0]["last_name"]
+                    p2_in_game_firstname = match[1][0][0]["first_name"]
+                    p2_in_game_lastname = match[1][0][0]["last_name"]
+                    p1_in_game = p1_in_game_firstname + p1_in_game_lastname
+                    p2_in_game = p2_in_game_firstname + p2_in_game_lastname
+                    if database_name == p1_in_game:
                         player1 = player
-                    if player.first_name + player.last_name == match[1][0][0]["first_name"] + match[1][0][0]["last_name"]:
+                    if database_name == p2_in_game:
                         player2 = player
-                        recovered_match = (
-                            [[
-                                player1,
-                                match[0][0][1],
-                                match[0][0][2]
-                            ], match[0][1]],
-                            [[
-                                player2,
-                                match[1][0][1],
-                                match[1][0][2]
-                            ], match[1][1]]                            
-                        )
-                # recovered_match = (
-                #     [[
-                #     joueurs.Joueurs(
-                #         match[0][0][0]["first_name"],
-                #         match[0][0][0]["last_name"],
-                #         match[0][0][0]["birthdate"],
-                #         match[0][0][0]["sex"],
-                #         match[0][0][0]["rank"]
-                #     ),
-                #     match[0][0][1],
-                #     match[0][0][2]
-                # ], match[0][1]], 
-                #     [[
-                #     joueurs.Joueurs(
-                #         match[1][0][0]["first_name"],
-                #         match[1][0][0]["last_name"],
-                #         match[1][0][0]["birthdate"],
-                #         match[1][0][0]["sex"],
-                #         match[1][0][0]["rank"]
-                #     ),
-                #     match[1][0][1],
-                #     match[1][0][2]
-                # ], match[1][1]])
+                recovered_match = (
+                    [[
+                        player1,
+                        match[0][0][1],
+                        match[0][0][2]
+                    ], match[0][1]],
+                    [[
+                        player2,
+                        match[1][0][1],
+                        match[1][0][2]
+                    ], match[1][1]]
+                )
                 recovered_matchs.append(recovered_match)
+
             recovered_round = rounds.Rounds(
                 round["name"],
                 recovered_matchs,

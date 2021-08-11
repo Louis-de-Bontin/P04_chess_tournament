@@ -1,14 +1,20 @@
 from model import joueurs
 from vue.basic_functions import entry_user_int, print_, entry_str
 
+
 def save_players(saved_players, db_players):
     db_players.truncate()
     for player in saved_players:
         db_players.insert(player.serialize_player())
 
+
 def create_player(saved_players, db_players):
     i = 0
-    j = entry_user_int("Combien de joueurs voulez vous créer ? (1-20)\n", 1, 20)
+    j = entry_user_int(
+        "Combien de joueurs voulez vous créer ? (1-20)\n",
+        1,
+        20
+    )
     while i < j:
         while True:
             first_name = entry_str("Prénom : ", '[a-zA-Z\s]+$')
@@ -23,8 +29,12 @@ def create_player(saved_players, db_players):
                                             sex,
                                             rank
                                         )
-            
-            validation_infos = entry_user_int("Les infos sont_elles correctes ? Yes(1) / No(2)", 1, 2)
+
+            validation_infos = entry_user_int(
+                "Les infos sont_elles correctes ? Yes(1) / No(2)",
+                1,
+                2
+            )
             if validation_infos == 1:
                 saved_players.append(new_player)
                 print_("="*20)
@@ -33,8 +43,6 @@ def create_player(saved_players, db_players):
             else:
                 continue
 
-
-    
     save_players(saved_players, db_players)
 
     return saved_players

@@ -1,10 +1,12 @@
 import re
 import datetime
 
+
 def print_(*arg):
     for a in arg:
-        print(a, end = '')
-    print("","")
+        print(a, end='')
+    print("", "")
+
 
 def entry_str(text, regex=None, length=20):
     while True:
@@ -12,7 +14,7 @@ def entry_str(text, regex=None, length=20):
             data = str(input(text))
             if regex:
                 match = bool(re.match(regex, data))
-                if match == False:
+                if match is False:
                     print("Mauvaise entrée, réessayer :")
                     continue
                 if len(data) > length:
@@ -34,6 +36,7 @@ def entry_str(text, regex=None, length=20):
             continue
     return data
 
+
 def entry_user_int(text, min, max, pair=False):
     while True:
         try:
@@ -41,7 +44,7 @@ def entry_user_int(text, min, max, pair=False):
             if choix_utilisateur < min or choix_utilisateur > max:
                 print("Mauvaise entrée, réessayer :")
                 continue
-            if pair and choix_utilisateur%2 != 0:
+            if pair and choix_utilisateur % 2 != 0:
                 print("Mauvaise entrée, réessayer :")
                 continue
             break
@@ -50,13 +53,13 @@ def entry_user_int(text, min, max, pair=False):
             continue
     return choix_utilisateur
 
+
 def multiple_user_entry(text, nb_entry, nb_saved_players):
     i = 0
     entry = []
     while len(entry) < nb_entry:
         entry.append(entry_user_int(text, 1, nb_saved_players)-1)
     return entry
-
 
 
 def display_players_header():
