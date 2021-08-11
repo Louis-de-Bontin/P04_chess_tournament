@@ -3,6 +3,7 @@ Lancer le programme :
 -Se localiser dans le dossier de destination
 -Cloner le code via le lien suivant : https://github.com/likhardcore/P04_chess_tournament.git
 -Créer un environnement virtuel avec la commande "python -m venv env"
+-Activer l'environnement virtuel avec la commande "env/scripts/activate" sous windows ou "env/bin/activate" sous macOS. 
 -Installer les packages avec la commande "pip install -r requirements.txt"
 -Lancer le programme avec la commande "python __main__.py"
 
