@@ -43,7 +43,7 @@ class Menus:
                 tournaments_playing.append(tournament)
 
         if len(tournaments_playing) == 0:
-            print_("Aucun tournois en cours.")
+            print_("Aucun tournois en cours.\n")
         else:
             print_(message.load_tournament_menu)
             i = 1
@@ -77,12 +77,19 @@ class Menus:
             if tournament.status == "Over":
                 tournaments_over.append(tournament)
 
-        i = 0
-        for tournament in tournaments_over:
-            if tournament.status == "Over":
-                i += 1
-                print_("Tournois : ", i)
-                tournament.display_tournament_basic()
-        choix_utilisateur = entry_user_int("Que voulez vous faire ?\n", 1, i)
-        print_("\n\n\nVoici les résultats du tournois :")
-        tournaments_over[choix_utilisateur - 1].display_tournament()
+        if len(tournaments_over) > 0:
+            i = 0
+            for tournament in tournaments_over:
+                if tournament.status == "Over":
+                    i += 1
+                    print_("Tournois : ", i)
+                    tournament.display_tournament_basic()
+            choix_utilisateur = entry_user_int(
+                "Que voulez vous faire ?\n",
+                1,
+                i
+            )
+            print_("\n\n\nVoici les résultats du tournois :")
+            tournaments_over[choix_utilisateur - 1].display_tournament()
+        else:
+            print_("Aucun tournois terminé.\n")
