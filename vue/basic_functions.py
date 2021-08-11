@@ -1,7 +1,38 @@
+import re
+import datetime
+
 def print_(*arg):
     for a in arg:
         print(a, end = '')
     print("","")
+
+def entry_str(text, regex=None, length=20):
+    while True:
+        try:
+            data = str(input(text))
+            if regex:
+                match = bool(re.match(regex, data))
+                if match == False:
+                    print("Mauvaise entrée, réessayer :")
+                    continue
+                if len(data) > length:
+                    print("Nom trop long, réessayer :")
+                    continue
+                if length == 1 and (data != "M" and data != "F"):
+                    print("ici")
+                    print("Mauvaise entrée, réessayer :")
+                    continue
+            else:
+                try:
+                    datetime.datetime.strptime(data, '%d-%m-%Y')
+                except:
+                    print("Mauvais format de date (JJ-MM-AAAA) : ")
+                    continue
+            break
+        except:
+            print("Mauvaise entrée, réessayer :")
+            continue
+    return data
 
 def entry_user_int(text, min, max, pair=False):
     while True:

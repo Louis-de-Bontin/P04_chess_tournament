@@ -1,19 +1,7 @@
-from vue.basic_functions import entry_user_int, print_
+from vue.basic_functions import print_
 
 class Joueurs:
-    """
-    Joueur :
--Nom de famille (str)
--Prénom (str)
--Date de naissance (datetime)
--Sexe (booléen)
--Classement (int)
 
--Être créé
--Être affiché
--Être modifié
--Modifier le classement
-"""
     def __init__(self, first_name, last_name, birthdate, sex, rank):
         self.first_name = first_name
         self.last_name = last_name

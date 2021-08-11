@@ -28,6 +28,23 @@ def display_matchs(matchs):
     else:
         print_(type(matchs))
 
+def check_if_already_played_together(match, matchs_played):
+    match_to_check = (match[0][0][0], match[1][0][0])
+    matchs_to_compare = []
+    already_played = False
+    for match in matchs_played:
+        matchs_to_compare.append((match[0][0][0], match[1][0][0]))
+    for match in matchs_to_compare:
+        if (
+            match_to_check[0] == match[0] and
+            match_to_check[1] == match[1]
+        ) or (
+            match_to_check[1] == match[0] and
+            match_to_check[0] == match[1]
+        ):
+            already_played = True
+    return already_played
+
 class Rounds:
     def __init__(self, name, matchs, datetime_start, datetime_end):
         self.name = name
@@ -35,7 +52,7 @@ class Rounds:
         self.datetime_start = datetime_start
         self.datetime_end = datetime_end
 
-    def create_match(self, players):
+    def create_match(self, players, rounds):
         numero_round_brut = re.findall('[0-9]+', self.name)
         numero_round = ""
         for numero in numero_round_brut:
@@ -52,12 +69,31 @@ class Rounds:
         half1 = players[:middle_index]
         half2 = players[middle_index:]
 
+        # Je regarde quels matchs ont déjà été joués
+        matchs_played = []
+        for round in rounds:
+            for match_played in round.matchs:
+                matchs_played.append(match_played)
+
         matchs = []
-        i = 0
-        # Tant que j'ai des joueurs dans une liste, je l'assotie avec le joueur avec le même classement dans l'autre moitier
-        while i < len(half1):
-            matchs.append(([half1[i], 0], [half2[i], 0])) # Un match est un tuple
-            i += 1
+        # Petit algo pour associer des joueurs qui n'ont pas envore jouer ensemble dans la mesure du possible
+        # Pour chaque élément de la 1ere moitier, je l'associe au premier joueur restant dans la 2eme liste n'ayant pas jouer avec. 
+        # A défaut, le dernier joueur de la liste 2
+        for i in range(len(half1)):
+            a = True
+            j = 0
+            while a == True:
+                j1 = half1[i]
+                j2 = half2[j]
+                match = ([j1, 0], [j2, 0])
+                already_played = check_if_already_played_together(match, matchs_played)
+                if already_played == True and j < len(half2)-1:
+                    j += 1
+                else:
+                    matchs.append(match)
+                    half2.pop(j)
+                    a = False
+            
         self.matchs = matchs
 
         print_("Nouveaux matchs :")

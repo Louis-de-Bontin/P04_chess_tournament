@@ -1,7 +1,7 @@
 from time import strftime
 from vue.basic_functions import entry_user_int, print_
 from model import rounds
-from datetime import date
+from datetime import datetime
 from model.rounds import display_matchs
 from controler.gestion_joueurs import save_players
 
@@ -39,7 +39,7 @@ class Tournaments:
         print_(
             "Nom : " + self.name,
             "\nDescription : " + self.description,
-            "\nRound " + str(self.rounds_count) + "/" + str(self.nb_rounds),
+            "\nRound " + str(self.rounds_count - 1) + "/" + str(self.nb_rounds - 1),
             "\nParticipants :"
         )
         for participant in self.participants:
@@ -109,11 +109,11 @@ class Tournaments:
                     new_round = rounds.Rounds(
                         "Round " + str(self.rounds_count),
                         [],
-                        date.today().strftime("%d/%m/%Y"),
+                        datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
                         "unknown"            
                     )
                     # Création des matchs associés
-                    new_round.create_match(self.participants)
+                    new_round.create_match(self.participants, self.rounds)
                     self.rounds.append(new_round)
 
                 for match in self.rounds[-1].matchs:
@@ -145,7 +145,7 @@ class Tournaments:
                         match[1][0][2] += 0.5
                     display_matchs(match)
 
-                self.rounds[-1].datetime_end = date.today().strftime("%d/%m/%Y")
+                self.rounds[-1].datetime_end = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                 self.display_tournament()
 
                 if self.rounds_count < self.nb_rounds:
@@ -173,7 +173,7 @@ class Tournaments:
             del_index = saved_tournaments.index(self)
             saved_tournaments.pop(del_index)
             self.status = "Over"
-            self.date_end = date.today().strftime("%d/%m/%Y")
+            self.date_end = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             saved_tournaments.append(self)
             self.save_tournaments(saved_tournaments, db_tournaments)
 

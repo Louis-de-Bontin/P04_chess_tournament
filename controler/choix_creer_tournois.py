@@ -1,6 +1,6 @@
 from vue.basic_functions import print_, entry_user_int, display_players_header, multiple_user_entry
 from model import tournaments, rounds
-from datetime import date
+from datetime import datetime
 
 def check_name_available(saved_tournaments, name):
     for tournament in saved_tournaments:
@@ -43,7 +43,7 @@ def choix1(menu, saved_players, saved_tournaments, db_tournaments, db_players):
             location = input("Où se passe le tournois ?")
             location = check_if_not_number(location)
 
-            date_start = date.today().strftime("%d/%m/%Y")
+            date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             date_end = "unknown"
 
             list_rounds = []

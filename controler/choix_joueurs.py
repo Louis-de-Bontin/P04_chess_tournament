@@ -18,7 +18,7 @@ def choix2(menu, saved_players, db_players):
                 print_(str(i+1) + ") " + player.first_name + " " + player.last_name + " : Rang " + str(player.rank))
                 i += 1
             
-            user_index = entry_user_int("Quel joueur voulez vous modifier ?", 1, i+1) -1
+            user_index = entry_user_int("Quel joueur voulez vous modifier ?", 1, i) -1
             print_("Modifier : " + saved_players[user_index].first_name + " " + saved_players[user_index].last_name)
             # Modification du rang du joueur
             saved_players[user_index].modify_player()

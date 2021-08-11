@@ -1,4 +1,3 @@
-from model.tournaments import Tournaments
 from vue import message, basic_functions
 from vue.basic_functions import print_, entry_user_int
 

@@ -39,46 +39,60 @@ def load_db():
 
         recovered_participants = []
         for participant in recovered_tournament.participants:
-            recoverd_participant = [joueurs.Joueurs(
-                participant[0]["first_name"],
-                participant[0]["last_name"],
-                participant[0]["birthdate"],
-                participant[0]["sex"],
-                participant[0]["rank"]
-            ),
-            participant[1],
-            participant[2]
-            ]
-            recovered_participants.append(recoverd_participant)
+            for player in saved_players:
+                if player.first_name + player.last_name == participant[0]["first_name"] + participant[0]["last_name"]:
+                    recovered_participants.append([
+                        player,
+                        participant[1],
+                        participant[2]
+                    ])
+            
         recovered_tournament.participants = recovered_participants
 
         recovered_rounds = []
         for round in recovered_tournament.rounds:
             recovered_matchs = []
             for match in round["matchs"]:
-                recovered_match = (
-                    [[
-                    joueurs.Joueurs(
-                        match[0][0][0]["first_name"],
-                        match[0][0][0]["last_name"],
-                        match[0][0][0]["birthdate"],
-                        match[0][0][0]["sex"],
-                        match[0][0][0]["rank"]
-                    ),
-                    match[0][0][1],
-                    match[0][0][2]
-                ], match[0][1]], 
-                    [[
-                    joueurs.Joueurs(
-                        match[1][0][0]["first_name"],
-                        match[1][0][0]["last_name"],
-                        match[1][0][0]["birthdate"],
-                        match[1][0][0]["sex"],
-                        match[1][0][0]["rank"]
-                    ),
-                    match[1][0][1],
-                    match[1][0][2]
-                ], match[1][1]])
+                for player in saved_players:
+                    if player.first_name + player.last_name == match[0][0][0]["first_name"] + match[0][0][0]["last_name"]:
+                        player1 = player
+                    if player.first_name + player.last_name == match[1][0][0]["first_name"] + match[1][0][0]["last_name"]:
+                        player2 = player
+                        recovered_match = (
+                            [[
+                                player1,
+                                match[0][0][1],
+                                match[0][0][2]
+                            ], match[0][1]],
+                            [[
+                                player2,
+                                match[1][0][1],
+                                match[1][0][2]
+                            ], match[1][1]]                            
+                        )
+                # recovered_match = (
+                #     [[
+                #     joueurs.Joueurs(
+                #         match[0][0][0]["first_name"],
+                #         match[0][0][0]["last_name"],
+                #         match[0][0][0]["birthdate"],
+                #         match[0][0][0]["sex"],
+                #         match[0][0][0]["rank"]
+                #     ),
+                #     match[0][0][1],
+                #     match[0][0][2]
+                # ], match[0][1]], 
+                #     [[
+                #     joueurs.Joueurs(
+                #         match[1][0][0]["first_name"],
+                #         match[1][0][0]["last_name"],
+                #         match[1][0][0]["birthdate"],
+                #         match[1][0][0]["sex"],
+                #         match[1][0][0]["rank"]
+                #     ),
+                #     match[1][0][1],
+                #     match[1][0][2]
+                # ], match[1][1]])
                 recovered_matchs.append(recovered_match)
             recovered_round = rounds.Rounds(
                 round["name"],
