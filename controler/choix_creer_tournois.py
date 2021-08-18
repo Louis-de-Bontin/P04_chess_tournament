@@ -1,4 +1,4 @@
-from vue.basic_functions import *
+from vue.basic_functions import print_, multiple_user_entry, entry_user_int
 from model import tournaments
 from datetime import datetime
 
@@ -16,12 +16,12 @@ def check_name_available(saved_tournaments, name):
 def check_if_not_number(variable):
     try:
         print("Variable :", variable)
-        float_variable = float(variable)
+        float(variable)
         variable = input(
             "Le lieu ne peut être un nombre, où se passe le tournois ?"
         )
         check_if_not_number(variable)
-    except:
+    except ValueError:
         pass
     return variable
 

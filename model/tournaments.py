@@ -1,4 +1,3 @@
-from time import strftime
 from vue.basic_functions import entry_user_int, print_
 from model import rounds
 from datetime import datetime

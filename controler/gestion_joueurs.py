@@ -17,10 +17,10 @@ def create_player(saved_players, db_players):
     )
     while i < j:
         while True:
-            first_name = entry_str("Prénom : ", '[a-zA-Z\s]+$')
-            last_name = entry_str("Nom de famille : ", '[a-zA-Z\s]+$')
+            first_name = entry_str("Prénom : ", '[a-zA-Z ]+$')
+            last_name = entry_str("Nom de famille : ", '[a-zA-Z ]+$')
             birthdate = entry_str("Date de naissance (Format JJ-MM-AAAA) : ")
-            sex = entry_str("Sexe (M/F) : ", '[a-zA-Z\s]+$', 1)
+            sex = entry_str("Sexe (M/F) : ", '[a-zA-Z ]+$', 1)
             rank = entry_user_int("Rang : ", 0, 9999999999)
             new_player = joueurs.Joueurs(
                                             first_name,

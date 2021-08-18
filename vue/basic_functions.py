@@ -27,11 +27,11 @@ def entry_str(text, regex=None, length=20):
             else:
                 try:
                     datetime.datetime.strptime(data, '%d-%m-%Y')
-                except:
+                except ValueError:
                     print("Mauvais format de date (JJ-MM-AAAA) : ")
                     continue
             break
-        except:
+        except ValueError:
             print("Mauvaise entrée, réessayer :")
             continue
     return data
@@ -48,14 +48,13 @@ def entry_user_int(text, min, max, pair=False):
                 print("Mauvaise entrée, réessayer :")
                 continue
             break
-        except:
+        except ValueError:
             print("Mauvaise entrée, réessayer :")
             continue
     return choix_utilisateur
 
 
 def multiple_user_entry(text, nb_entry, nb_saved_players):
-    i = 0
     entry = []
     while len(entry) < nb_entry:
         entry.append(entry_user_int(text, 1, nb_saved_players)-1)
