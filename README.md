@@ -47,5 +47,6 @@ Permet de quitter le programme
 exclude = .git, env, __pycache__, .gitignore
 max-line-length = 119
 ```
+- Ajouter la commande `flake8 au path`
 - Taper la commande `flake8 --format=html --htmldir=flake-report`
 - Le rapport est apparu dans un dossier nommé *flake-report*
