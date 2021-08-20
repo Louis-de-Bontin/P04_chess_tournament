@@ -82,7 +82,6 @@ def choix1(menu, saved_players, saved_tournaments, db_tournaments, db_players):
             participants = []
 
             for index in index_participants:
-                # Mettre le score du tournois quelque part (class ?)
                 new_player = saved_players[index]
                 participants.append([new_player, 0, new_player.rank])
 

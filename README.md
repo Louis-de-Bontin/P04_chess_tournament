@@ -49,4 +49,5 @@ max-line-length = 119
 ```
 - Ajouter la commande `flake8 au path`
 - Taper la commande `flake8 --format=html --htmldir=flake-report`
+- En cas d'erreur, situer l'application flake8. Esayer donc la commande  `C:\Users\louis\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\LocalCache\local-packages\Python39\Scripts\flake8 --format=html --htmldir=flake-report`
 - Le rapport est apparu dans un dossier nommé *flake-report*
