@@ -15,7 +15,6 @@ def check_name_available(saved_tournaments, name):
 
 def check_if_not_number(variable):
     try:
-        print("Variable :", variable)
         float(variable)
         variable = input(
             "Le lieu ne peut être un nombre, où se passe le tournois ?"

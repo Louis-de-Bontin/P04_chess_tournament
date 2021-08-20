@@ -40,7 +40,7 @@ class Tournaments:
             "Nom : " + self.name,
             "\nDescription : " + self.description,
             "\nRound " +
-            str(self.rounds_count - 1) +
+            str(self.rounds_count) +
             "/" +
             str(self.nb_rounds - 1),
             "\nParticipants :"

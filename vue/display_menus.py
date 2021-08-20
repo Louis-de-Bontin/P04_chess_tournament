@@ -82,10 +82,10 @@ class Menus:
             for tournament in tournaments_over:
                 if tournament.status == "Over":
                     i += 1
-                    print_("Tournois : ", i)
+                    print_("Tournois n°", i)
                     tournament.display_tournament_basic()
             choix_utilisateur = entry_user_int(
-                "Que voulez vous faire ?\n",
+                "Entrez le numéro du tournois que vous voulez voir : \n",
                 1,
                 i
             )

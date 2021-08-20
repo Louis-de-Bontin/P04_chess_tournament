@@ -21,7 +21,6 @@ def entry_str(text, regex=None, length=20):
                     print("Nom trop long, réessayer :")
                     continue
                 if length == 1 and (data != "M" and data != "F"):
-                    print("ici")
                     print("Mauvaise entrée, réessayer :")
                     continue
             else:
@@ -40,7 +39,7 @@ def entry_str(text, regex=None, length=20):
 def entry_user_int(text, min, max, pair=False):
     while True:
         try:
-            choix_utilisateur = int(input(text))
+            choix_utilisateur = int(input(text + "\n"))
             if choix_utilisateur < min or choix_utilisateur > max:
                 print("Mauvaise entrée, réessayer :")
                 continue
